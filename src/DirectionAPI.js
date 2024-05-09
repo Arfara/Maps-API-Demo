@@ -1,11 +1,12 @@
 import { Box, Button, ButtonGroup, Flex, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, SkeletonText, Text } from '@chakra-ui/react'
 import { FaLocationArrow, FaTimes, FaCaretDown } from 'react-icons/fa'
 import CompanyLogo from './Assets/magna.png';
+import { Link } from 'react-router-dom';
 
 import { useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer } from '@react-google-maps/api'
 import { useRef, useState } from 'react'
 
-const center = { lat: -6.241193693118617, lng: 106.834407451799 }
+const center = { lat: -6.229856204459448, lng: 106.82030598009202 }
 
 function DirectionAPI() {
   const { isLoaded } = useJsApiLoader({
@@ -74,9 +75,10 @@ function DirectionAPI() {
             Try Another APIs
           </MenuButton>
           <MenuList>
-            <MenuItem>Geocoding API (under development)</MenuItem>
-            <MenuItem>Geolocation API (under development)</MenuItem>
-            <MenuItem>Streetview API (under development)</MenuItem>
+            {/* Gunakan Link untuk mengarahkan ke rute baru */}
+            <MenuItem>
+              <Link to="/air-quality">Air Quality API</Link>
+            </MenuItem>
           </MenuList>
         </Menu>
       </Flex>

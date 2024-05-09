@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Box, Button, Flex, Input } from '@chakra-ui/react';
-import CompanyLogo from './Assets/magna.png';
+import { Box, Button, Flex, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import CompanyLogo from './Assets/magna.png';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State untuk menampilkan/menyembunyikan password
   const staticUser = { username: 'magnaglobal', password: 'M@gn@1234' };
   const navigate = useNavigate();
 
@@ -33,20 +35,24 @@ const LoginPage = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <Flex direction="column" align="center" justify="center" minHeight="100vh">
-      <Flex alignItems="center" justifyContent="center" w="100%" p={4} maxWidth="100%">
+      <Flex alignItems="center" justifyContent="center" w="100%" p={2} maxWidth="100%">
         {/* Logo */}
         <Box mr={2}>
-          <img src={CompanyLogo} alt="Company Logo" style={{ width: '100px', height: '70px' }} />
+          <img src={CompanyLogo} alt="Company Logo" style={{ width: '80px', height: '56px' }} />
         </Box>
       </Flex>
-      <h2 style={{ textAlign: 'center', fontSize: '24px', marginBottom: '24px' }}>Google Maps API Demo</h2>
-      <Box p={8} borderRadius="md" borderWidth="1px" boxShadow="md">
-        <h2 style={{ textAlign: 'center', marginBottom: '15px', fontSize: '24px' }}>Login</h2>
+      <h2 style={{ textAlign: 'center', fontSize: '20px', marginBottom: '20px' }}>Google Maps API Demo</h2>
+      <Box p={4} borderRadius="md" borderWidth="1px" boxShadow="md" width="80%" maxWidth="400px">
+        <h2 style={{ textAlign: 'center', marginBottom: '10px', fontSize: '20px' }}>Login</h2>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <div className="form-group">
-            <label htmlFor="username" style={{ marginBottom: '8px' }}>Username</label>
+          <div className="form-group" style={{ marginBottom: '10px' }}>
+            <label htmlFor="username">Username</label>
             <Input
               type="text"
               id="username"
@@ -57,19 +63,28 @@ const LoginPage = () => {
               autoFocus
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="password" style={{ marginBottom: '8px' }}>Password</label>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-            />
+          <div className="form-group" style={{ marginBottom: '10px' }}>
+            <label htmlFor="password">Password</label>
+            <InputGroup>
+              <Input
+                type={showPassword ? 'text' : 'password'} // Menggunakan tipe input berdasarkan state showPassword
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+              />
+              <InputRightElement>
+                {showPassword ? (
+                  <FaEyeSlash onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }} />
+                ) : (
+                  <FaEye onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }} />
+                )}
+              </InputRightElement>
+            </InputGroup>
           </div>
-          {errorMessage && <div style={{ color: '#ff0000', textAlign: 'center' }}>{errorMessage}</div>}
-          <Button type="submit" colorScheme="blue" width="100%" mt={5} isLoading={isLoading}>Login</Button>
+          {errorMessage && <div style={{ color: '#ff0000', textAlign: 'center', marginBottom: '10px' }}>{errorMessage}</div>}
+          <Button type="submit" colorScheme="blue" width="100%" isLoading={isLoading}>Login</Button>
         </form>
       </Box>
     </Flex>
