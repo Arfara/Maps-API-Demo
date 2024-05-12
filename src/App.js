@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/directions" element={<DirectionAPI />} />
-        <Route path="/air-quality" element={<AirQualityAPI />} />
+        {/* <Route path="/air-quality" element={<AirQualityAPI />} /> */}
       </Routes>
     </Router>
   );
