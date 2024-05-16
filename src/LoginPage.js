@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State untuk menampilkan/menyembunyikan password
+  const [showPassword, setShowPassword] = useState(false);
   const staticUser = { username: 'magnaglobal', password: 'M@gn@1234' };
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const LoginPage = () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 900)); 
       if (formData.username === staticUser.username && formData.password === staticUser.password) {
-        navigate('/directions');
+        navigate('/main-menu');
       } else {
         setErrorMessage('Invalid username or password. Please try again.');
       }
