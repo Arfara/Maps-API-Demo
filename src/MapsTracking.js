@@ -4,7 +4,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import logo from './Assets/magna.png';
 
-const googleMapsApiKey = 'AIzaSyDXiinNcPuEv1S1T4rtpeF-mwVp-HOk9yY';
+const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 const MapsTracking = () => {
   const [location, setLocation] = useState(null);

@@ -15,8 +15,6 @@ const Admin = () => {
       }));
       setLocations(locationsData);
     });
-
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
