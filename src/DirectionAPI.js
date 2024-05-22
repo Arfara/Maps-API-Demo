@@ -1,10 +1,8 @@
 import { Box, Button, ButtonGroup, Flex, HStack, IconButton, Input, SkeletonText, Text } from '@chakra-ui/react';
-import { FaLocationArrow, FaTimes, FaPlus, FaBars, FaMapMarkerAlt} from 'react-icons/fa'; 
+import { FaLocationArrow, FaTimes, FaPlus, FaBars, FaMapMarkerAlt } from 'react-icons/fa'; 
 import CompanyLogo from './Assets/magna.png';
 import { useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer, TrafficLayer } from '@react-google-maps/api';
 import { useRef, useState, useEffect } from 'react';
-
-const center = { lat: -6.229856204459448, lng: 106.82030598009202 };
 
 function DirectionAPI() {
   const { isLoaded } = useJsApiLoader({
@@ -20,7 +18,7 @@ function DirectionAPI() {
   const [additionalWaypoint, setAdditionalWaypoint] = useState('');
   const [rightPaneOpen, setRightPaneOpen] = useState(true);
   const [trafficLayer, setTrafficLayer] = useState(null);
-  const [currentPosition, setCurrentPosition] = useState(center);
+  const [currentPosition, setCurrentPosition] = useState(null);
   const [heading, setHeading] = useState(null);
   const originRef = useRef();
   const destinationRef = useRef();
@@ -43,7 +41,6 @@ function DirectionAPI() {
           if (map) {
             map.panTo({ lat: latitude, lng: longitude });
           }
-          updateRoute();
         },
         (error) => console.log(error),
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
@@ -57,15 +54,20 @@ function DirectionAPI() {
   }
 
   async function calculateRoute() {
-    if (!originRef.current.value || !destinationRef.current.value) {
+    if (!originRef.current.value && !currentPosition) {
+      return;
+    }
+    if (!destinationRef.current.value) {
       return;
     }
 
     const directionsService = new window.google.maps.DirectionsService();
     const waypointsLocations = waypoints.map(waypoint => ({ location: waypoint }));
 
+    const origin = originRef.current.value || currentPosition;
+
     const results = await directionsService.route({
-      origin: originRef.current.value,
+      origin,
       destination: destinationRef.current.value,
       waypoints: waypointsLocations,
       optimizeWaypoints: true,
@@ -74,26 +76,6 @@ function DirectionAPI() {
 
     setDirectionsResponse(results);
     updateDistanceAndDuration(results);
-  }
-
-  function updateRoute() {
-    if (!originRef.current.value || !destinationRef.current.value) {
-      return;
-    }
-
-    const directionsService = new window.google.maps.DirectionsService();
-    const remainingWaypoints = waypoints.map(waypoint => ({ location: waypoint }));
-
-    directionsService.route({
-      origin: currentPosition,
-      destination: destinationRef.current.value,
-      waypoints: remainingWaypoints,
-      optimizeWaypoints: true,
-      travelMode: window.google.maps.TravelMode.DRIVING,
-    }).then(results => {
-      setDirectionsResponse(results);
-      updateDistanceAndDuration(results);
-    });
   }
 
   function updateDistanceAndDuration(results) {
@@ -158,8 +140,6 @@ function DirectionAPI() {
       });
     }
   }
-  
-  
 
   return (
     <Flex flexDirection='row' h='100vh' w='100vw' overflowX='hidden'>
@@ -173,7 +153,7 @@ function DirectionAPI() {
 
         <Box position='relative' flex='1' width='100%' maxWidth='100%' overflow='hidden'>
           <GoogleMap
-            center={currentPosition}
+            center={currentPosition || { lat: -34.397, lng: 150.644 }}
             zoom={15}
             mapContainerStyle={{ width: '100%', height: '100%' }}
             options={{
@@ -184,15 +164,17 @@ function DirectionAPI() {
             }}
             onLoad={map => setMap(map)}
           >
-            <Marker position={currentPosition} icon={{
-              path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-              scale: 5,
-              rotation: heading,
-              fillColor: '#0000ff',
-              fillOpacity: 1,
-              strokeWeight: 2,
-              strokeColor: '#ffffff',
-            }} />
+            {currentPosition && (
+              <Marker position={currentPosition} icon={{
+                path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                scale: 5,
+                rotation: heading,
+                fillColor: '#0000ff',
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: '#ffffff',
+              }} />
+            )}
             {directionsResponse && (
               <DirectionsRenderer directions={directionsResponse} />
             )}
