@@ -72,6 +72,8 @@ function DirectionAPI() {
       waypoints: waypointsLocations,
       optimizeWaypoints: true,
       travelMode: window.google.maps.TravelMode.DRIVING,
+      avoidTolls: true,
+      provideRouteAlternatives: true,
     });
 
     setDirectionsResponse(results);
