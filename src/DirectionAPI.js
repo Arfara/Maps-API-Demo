@@ -153,7 +153,7 @@ function DirectionAPI() {
 
         <Box position='relative' flex='1' width='100%' maxWidth='100%' overflow='hidden'>
           <GoogleMap
-            center={currentPosition || { lat: -34.397, lng: 150.644 }}
+            center={currentPosition || { lat: -6.229354611819955, lng: 106.81945787252144 }}
             zoom={15}
             mapContainerStyle={{ width: '100%', height: '100%' }}
             options={{
